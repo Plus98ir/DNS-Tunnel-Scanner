@@ -30,7 +30,7 @@ DNS Tunnel Scanner tests them on your current network and keeps only the ones th
 
 1. Install the APK (Android 7+) or run the EXE (Windows 10/11, no Python needed).
 2. Paste your profile link once (`stormdns://…` or `masterdns://…`, e.g. WhiteDNS → export profile). It stays on your device; no panel access is needed.
-3. Keep the sources ticked (this device's DNS, resolvers that worked here before, Iranian and global public resolvers), add your own IPs or CIDR ranges if you like, and press **Start scan**.
+3. Keep the sources ticked (this device's DNS, resolvers that worked here before, Iranian and global public resolvers), add your own IPs or CIDR ranges if you like, and press **Start scan**. Nothing works? Turn on **Deep scan**: it searches your ISP's ranges for open resolvers no list has.
 4. In WhiteDNS: import the profile link and paste the resolver list.
 
 Results depend on the ISP: scan again on each SIM / Wi-Fi. The app remembers the working resolvers per network and tests them first next time.
@@ -53,7 +53,7 @@ DNS Tunnel Scanner ریزالورها را روی همان اینترنتی که
 
 ۲. لینک پروفایل را یک بار بچسبانید (`stormdns://…` یا `masterdns://…`، مثلاً از WhiteDNS ← خروجی پروفایل). روی دستگاه خودتان می‌ماند؛ به پنل نیازی نیست.
 
-۳. منبع‌ها را تیک‌خورده نگه دارید (DNS خود دستگاه، ریزالورهایی که قبلاً همین‌جا کار کرده‌اند، ریزالورهای عمومی ایرانی و خارجی)، اگر خواستید IP یا رنج CIDR خودتان را اضافه کنید و **شروع اسکن** را بزنید.
+۳. منبع‌ها را تیک‌خورده نگه دارید (DNS خود دستگاه، ریزالورهایی که قبلاً همین‌جا کار کرده‌اند، ریزالورهای عمومی ایرانی و خارجی)، اگر خواستید IP یا رنج CIDR خودتان را اضافه کنید و **شروع اسکن** را بزنید. چیزی کار نکرد؟ **اسکن عمیق** را روشن کنید: رنج آدرس‌های اپراتورتان را برای ریزالورهای بازی که در هیچ لیستی نیستند می‌گردد.
 
 ۴. در WhiteDNS: لینک پروفایل را وارد کنید و لیست ریزالورها را بچسبانید.
 
