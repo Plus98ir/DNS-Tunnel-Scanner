@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DNS Tunnel Scanner</title>
+<meta name="description" content="Finds the DNS resolvers your StormDNS / WhiteDNS / MasterDNS tunnel really works through on your network: a real tunnel session with real traffic per resolver, per ISP. Windows exe + Android apk.">
+<meta property="og:title" content="DNS Tunnel Scanner">
+<meta property="og:description" content="Which DNS resolvers really carry your DNS tunnel on this ISP? Real tunnel test per resolver, QR + link sharing.">
+<meta property="og:image" content="https://plus98ir.dpdns.org/DNS-Tunnel-Scanner/DNS-Tunnel-Scanner.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+:root {
+  --bg: #0a0f11; --card: #121a1d; --card2: #172125; --text: #e6eef0; --muted: #94a3a8; --line: #23302f;
+  --accent: #2dd4bf; --accent2: #67e8f9; --accent-ink: #052421; --ok: #4ade80; --bad: #f87171;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f3f6f6; --card: #ffffff; --card2: #f5f8f8; --text: #172024; --muted: #56656a; --line: #d8e1e2;
+          --accent: #0d9488; --accent2: #0e7490; --accent-ink: #ffffff; --ok: #15803d; --bad: #b91c1c; }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.7 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+html[lang="fa"] body { font-family: Vazirmatn, "Segoe UI", Tahoma, sans-serif; line-height: 1.9; }
+a { color: var(--accent2); }
+code { background: var(--card2); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; font-family: Consolas, Menlo, monospace; font-size: 13px; direction: ltr; unicode-bidi: isolate; }
+header { display: flex; align-items: center; gap: 12px; padding: 14px 32px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--card) 88%, transparent); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 5; }
+.logo { width: 34px; height: 34px; display: block; }
+header b { font-size: 17px; }
+.spacer { flex: 1; }
+.nav { display: flex; gap: 18px; }
+.nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+.nav a:hover { color: var(--text); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--text); padding: 6px 12px; cursor: pointer; font: inherit; }
+.seg button.on { background: var(--accent); color: var(--accent-ink); }
+main { width: 100%; padding: 24px 32px 40px; }
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 7fr); gap: 48px; align-items: center; padding: 28px 0 36px; }
+.hero::before { content: ""; position: absolute; inset: -40px -32px auto; height: 520px; z-index: -1; pointer-events: none;
+  background: radial-gradient(520px 340px at 15% 30%, rgba(45,212,191,.16), transparent 70%), radial-gradient(600px 400px at 85% 40%, rgba(103,232,249,.10), transparent 70%); }
+.badge { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); border-radius: 99px; padding: 4px 12px; font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+.hero h1 { font-size: clamp(30px, 3.8vw, 54px); line-height: 1.15; margin: 0 0 16px; }
+.hero h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { color: var(--muted); font-size: 17px; margin: 0 0 24px; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; border: 1px solid var(--line); color: var(--text); background: var(--card); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:hover { border-color: var(--accent); }
+.small { font-size: 13px; color: var(--muted); margin-top: 12px; }
+/* how-it-works diagram */
+.flow { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: 0 30px 80px rgba(0,0,0,.35); display: grid; gap: 14px; }
+.flow .row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.node { background: var(--card2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14px; text-align: center; min-width: 110px; }
+.node small { display: block; color: var(--muted); font-size: 12px; }
+.pipe { height: 2px; background: repeating-linear-gradient(90deg, var(--accent) 0 8px, transparent 8px 14px); position: relative; }
+.pipe.dead { background: repeating-linear-gradient(90deg, var(--bad) 0 8px, transparent 8px 14px); opacity: .7; }
+.pipe span { position: absolute; inset-inline-start: 50%; top: -22px; transform: translateX(-50%); font-size: 12px; color: var(--muted); white-space: nowrap; }
+html[dir="rtl"] .pipe span { transform: translateX(50%); }
+.res { display: grid; gap: 8px; }
+.res div { display: flex; justify-content: space-between; gap: 10px; background: var(--card2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 13.5px; }
+.res .ip { font-family: Consolas, Menlo, monospace; direction: ltr; }
+.ok { color: var(--ok); } .bad { color: var(--bad); } .na { color: var(--muted); }
+section { margin-top: 48px; }
+h2 { font-size: 26px; margin: 0 0 6px; }
+.lead { color: var(--muted); margin: 0 0 18px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr)); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 0; color: var(--muted); }
+.ico { font-size: 22px; margin-bottom: 6px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+ol.steps { margin: 0; padding-inline-start: 22px; }
+ol.steps li { margin: 6px 0; }
+.note { background: var(--card2); border-inline-start: 3px solid var(--accent); border-radius: 8px; padding: 10px 14px; color: var(--muted); margin-top: 12px; }
+footer { border-top: 1px solid var(--line); padding: 18px 32px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+[data-l] { display: none; }
+html[lang="fa"] [data-l="fa"], html[lang="en"] [data-l="en"] { display: revert; }
+html:not([lang="fa"]) [data-l="fa"], html:not([lang="en"]) [data-l="en"] { display: none !important; }
+@media (max-width: 1100px) { .nav { display: none; } }
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 8px; }
+  .cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  header { padding: 10px 16px; gap: 8px; }
+  header b { font-size: 15px; }
+  main { padding: 16px 16px 32px; }
+  footer { padding: 16px; }
+  .btn { flex: 1 1 auto; justify-content: center; }
+  .hero p { font-size: 15.5px; }
+  .flow { padding: 14px; }
+  .node { min-width: 0; padding: 8px 8px; font-size: 13px; }
+  .pipe span { font-size: 11px; }
+}
+</style>
+<script>window.goatcounter={path:function(){return "/"+location.pathname.split("/")[1]+"/"}};</script>
+<script data-goatcounter="https://plus98.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header>
+  <img class="logo" src="icon.svg" alt="" width="34" height="34">
+  <b>DNS Tunnel Scanner</b>
+  <div class="spacer"></div>
+  <nav class="nav">
+    <a href="#how"><span data-l="fa">چطور کار می‌کند</span><span data-l="en">How it works</span></a>
+    <a href="#features"><span data-l="fa">امکانات</span><span data-l="en">Features</span></a>
+    <a href="#download"><span data-l="fa">دانلود</span><span data-l="en">Download</span></a>
+    <a href="#faq"><span data-l="fa">پرسش‌ها</span><span data-l="en">FAQ</span></a>
+  </nav>
+  <div class="seg" role="group" aria-label="Language">
+    <button data-lang="en">EN</button><button data-lang="fa">فا</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div>
+      <div class="badge"><i></i><span data-l="fa">ویندوز (exe) و اندروید (apk) · رایگان</span><span data-l="en">Windows (exe) and Android (apk) · free</span></div>
+      <h1 data-l="fa">ریزالورهایی که تونل DNS شما <span>واقعاً</span> از آن‌ها کار می‌کند</h1>
+      <h1 data-l="en">The DNS resolvers your DNS tunnel <span>really</span> works through</h1>
+      <p data-l="fa">در قطعی اینترنت معمولاً فقط DNS باز است. DNS Tunnel Scanner روی همان اینترنتی که هستید (همراه اول، ایرانسل، مخابرات…) ریزالورها را یکی‌یکی با <b>خود کلاینت تونل</b> و <b>ترافیک واقعی</b> تست می‌کند و فقط آن‌هایی را که واقعاً کار می‌کنند، مرتب‌شده بر اساس سرعت، تحویل می‌دهد؛ با لینک و QR برای بقیه.</p>
+      <p data-l="en">During a shutdown often only DNS is left. DNS Tunnel Scanner tests resolvers one by one on the network you are on (MCI, Irancell, TCI…) with <b>the real tunnel client</b> and <b>real traffic</b>, and hands you only the ones that really work, fastest first, with a link and a QR code for everyone else.</p>
+      <div class="btns">
+        <a class="btn primary" href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk"><span data-l="fa">دانلود اندروید (APK)</span><span data-l="en">Download for Android (APK)</span></a>
+        <a class="btn" href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe"><span data-l="fa">دانلود ویندوز (EXE)</span><span data-l="en">Download for Windows (EXE)</span></a>
+      </div>
+      <div class="small"><span data-l="fa">برای StormDNS / WhiteDNS / MasterDNS. بدون نیاز به دسترسی پنل: لینک پروفایل را یک بار بچسبانید.</span><span data-l="en">For StormDNS / WhiteDNS / MasterDNS. No panel access needed: paste your profile link once.</span></div>
+    </div>
+    <div class="flow" aria-hidden="true">
+      <div class="row"><div class="node"><span data-l="fa">گوشی شما</span><span data-l="en">Your phone</span><small>WhiteDNS</small></div>
+        <div class="pipe"><span>DNS</span></div>
+        <div class="node"><span data-l="fa">ریزالور</span><span data-l="en">Resolver</span><small><span data-l="fa">کدام‌یک؟</span><span data-l="en">which one?</span></small></div></div>
+      <div class="row"><div class="node"><span data-l="fa">ریزالور</span><span data-l="en">Resolver</span></div>
+        <div class="pipe"><span data-l="fa">تونل</span><span data-l="en">tunnel</span></div>
+        <div class="node"><span data-l="fa">سرور تونل</span><span data-l="en">Tunnel server</span><small>→ Internet</small></div></div>
+      <div class="res">
+        <div><span><span data-l="fa">DNS اپراتور</span><span data-l="en">ISP DNS</span></span><span class="ok">✓ KB/s ···</span></div>
+        <div><span><span data-l="fa">ریزالور عمومی ۱</span><span data-l="en">Public resolver 1</span></span><span class="ok">✓ KB/s ···</span></div>
+        <div><span><span data-l="fa">ریزالور عمومی ۲</span><span data-l="en">Public resolver 2</span></span><span class="bad"><span data-l="fa">✗ بسته‌ها کوچک (MTU)</span><span data-l="en">✗ packets too small (MTU)</span></span></div>
+        <div><span><span data-l="fa">ریزالور عمومی ۳</span><span data-l="en">Public resolver 3</span></span><span class="na"><span data-l="fa">✗ به سرور نمی‌رسد</span><span data-l="en">✗ can't reach the server</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <h2 data-l="fa">چطور کار می‌کند</h2><h2 data-l="en">How it works</h2>
+    <p class="lead" data-l="fa">«جواب می‌دهد» کافی نیست؛ ریزالور فقط وقتی «سالم» است که یک اتصال واقعی تونل از آن ترافیک واقعی رد کند.</p>
+    <p class="lead" data-l="en">"It answers" is not enough: a resolver counts only when a real tunnel session through it carried real traffic.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">⚡</div><h3 data-l="fa">۱. فیلتر سریع</h3><h3 data-l="en">1. Quick filter</h3>
+        <p data-l="fa">یک نام تصادفی زیر دامنه‌ی تونل شما پرسیده می‌شود. فقط سرور تونل شما می‌تواند جوابش را بدهد، پس جواب یعنی ریزالور به سرور می‌رسد. هزاران ریزالور در دقیقه.</p>
+        <p data-l="en">A random name under your tunnel domain is asked. Only your tunnel server can answer it, so an answer proves the resolver reaches the server. Thousands of resolvers a minute.</p></div>
+      <div class="card"><div class="ico">🔌</div><h3 data-l="fa">۲. تست واقعی</h3><h3 data-l="en">2. Real test</h3>
+        <p data-l="fa">خود کلاینت StormDNS فقط با همان یک ریزالور اجرا می‌شود، اتصال می‌سازد و یک صفحه‌ی HTTPS از داخل تونل باز می‌کند. اگر نشد، یک بار دیگر امتحان می‌شود تا یک بسته‌ی گم‌شده ریزالور سالم را رد نکند.</p>
+        <p data-l="en">The real StormDNS client starts with just that one resolver, builds a session and loads an HTTPS page through the tunnel. A failure gets a second try, so one lost packet doesn't reject a good resolver.</p></div>
+      <div class="card"><div class="ico">📶</div><h3 data-l="fa">۳. سرعت و رتبه</h3><h3 data-l="en">3. Speed and ranking</h3>
+        <p data-l="fa">از هر ریزالور سالم یک دانلود کوچک رد می‌شود؛ نتیجه بر اساس سرعت مرتب می‌شود، با زمان پاسخ و MTU.</p>
+        <p data-l="en">A small download goes through each working resolver; results are ranked by speed, with reply time and MTU.</p></div>
+      <div class="card"><div class="ico">🔗</div><h3 data-l="fa">۴. اشتراک</h3><h3 data-l="en">4. Share</h3>
+        <p data-l="fa">لیست ریزالورها و لینک پروفایل WhiteDNS را کپی کنید یا QR آن را به بقیه‌ی هم‌اپراتوری‌ها نشان دهید.</p>
+        <p data-l="en">Copy the resolver list and the WhiteDNS profile link, or show its QR code to others on the same ISP.</p></div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2 data-l="fa">امکانات</h2><h2 data-l="en">Features</h2>
+    <div class="grid">
+      <div class="card"><h3 data-l="fa">ریزالورهای خودِ دستگاه</h3><h3 data-l="en">The device's own DNS</h3>
+        <p data-l="fa">DNS اپراتور (یا مودم) خودکار پیدا و تست می‌شود؛ معمولاً همین‌ها در قطعی باز می‌مانند.</p>
+        <p data-l="en">The ISP's (or router's) DNS is found and tested automatically: these usually stay open in a shutdown.</p></div>
+      <div class="card"><h3 data-l="fa">لیست‌های آماده + رنج دلخواه</h3><h3 data-l="en">Built-in lists + your ranges</h3>
+        <p data-l="fa">ریزالورهای عمومی ایرانی و خارجی، به‌علاوه‌ی IP یا رنج CIDR دلخواه شما (تا 65536 آدرس).</p>
+        <p data-l="en">Iranian and global public resolvers, plus any IPs or CIDR ranges you add (up to 65536 addresses).</p></div>
+      <div class="card"><h3 data-l="fa">پیدا کردن همسایه‌ها</h3><h3 data-l="en">Find neighbours</h3>
+        <p data-l="fa">وقتی ریزالوری کار کرد، بقیه‌ی /24 آن هم تست می‌شود؛ ریزالورهای اپراتورها کنار هم هستند.</p>
+        <p data-l="en">When a resolver works, the rest of its /24 is tested too: ISP resolver farms sit together.</p></div>
+      <div class="card"><h3 data-l="fa">حافظه برای هر شبکه</h3><h3 data-l="en">Memory per network</h3>
+        <p data-l="fa">ریزالورهای سالم برای هر اپراتور جدا ذخیره و دفعه‌ی بعد اول تست می‌شوند، حتی وقتی اینترنت جهانی قطع است.</p>
+        <p data-l="en">Working resolvers are remembered per ISP and tested first next time, even when the global internet is down.</p></div>
+      <div class="card"><h3 data-l="fa">مراقب سرور شما</h3><h3 data-l="en">Gentle on your server</h3>
+        <p data-l="fa">هر اتصال تستی بعد از تست درست بسته می‌شود تا جای کاربران واقعی سرور را نگیرد.</p>
+        <p data-l="en">Every test session is closed properly afterwards, so it never takes a slot from the server's real users.</p></div>
+      <div class="card"><h3 data-l="fa">دو زبانه، تاریک، موبایل</h3><h3 data-l="en">Bilingual, dark, mobile</h3>
+        <p data-l="fa">فارسی و انگلیسی، روی گوشی و کامپیوتر؛ نسخه‌های جدید را خودش خبر می‌دهد.</p>
+        <p data-l="en">Persian and English, on phone and PC; tells you when a new version is out.</p></div>
+    </div>
+  </section>
+
+  <section id="download">
+    <h2 data-l="fa">دانلود و اجرا</h2><h2 data-l="en">Download and run</h2>
+    <div class="cols">
+      <div class="card"><h3 data-l="fa">اندروید</h3><h3 data-l="en">Android</h3>
+        <ol class="steps" data-l="fa"><li><a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk">DNS-Tunnel-Scanner.apk</a> را دانلود و نصب کنید (اندروید ۷ به بالا).</li><li>لینک پروفایل StormDNS / WhiteDNS را بچسبانید.</li><li>«شروع اسکن» را بزنید؛ ریزالورهای سالم را در WhiteDNS بگذارید.</li></ol>
+        <ol class="steps" data-l="en"><li>Download and install <a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk">DNS-Tunnel-Scanner.apk</a> (Android 7+).</li><li>Paste your StormDNS / WhiteDNS profile link.</li><li>Press "Start scan"; put the working resolvers into WhiteDNS.</li></ol></div>
+      <div class="card"><h3 data-l="fa">ویندوز</h3><h3 data-l="en">Windows</h3>
+        <ol class="steps" data-l="fa"><li><a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe">DNS-Tunnel-Scanner.exe</a> را دانلود و اجرا کنید (پایتون لازم نیست).</li><li>صفحه‌ی اسکنر در مرورگر باز می‌شود؛ با بستن صفحه، برنامه هم بسته می‌شود.</li></ol>
+        <ol class="steps" data-l="en"><li>Download and run <a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe">DNS-Tunnel-Scanner.exe</a> (no Python needed).</li><li>The scanner page opens in your browser; closing the page closes the app.</li></ol>
+        <div class="note" data-l="fa">ویندوز ممکن است برای برنامه‌ی ناشناس هشدار SmartScreen بدهد: More info ← Run anyway.</div>
+        <div class="note" data-l="en">Windows may show a SmartScreen warning for an unknown app: More info → Run anyway.</div></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 data-l="fa">پرسش‌ها</h2><h2 data-l="en">FAQ</h2>
+    <div class="grid">
+      <div class="card"><h3 data-l="fa">به پنل یا سرور دسترسی لازم دارد؟</h3><h3 data-l="en">Does it need panel or server access?</h3>
+        <p data-l="fa">نه. همان لینک پروفایلی که در WhiteDNS وارد می‌کنید کافی است و فقط روی دستگاه خودتان می‌ماند.</p>
+        <p data-l="en">No. The same profile link you import into WhiteDNS is enough, and it stays on your own device.</p></div>
+      <div class="card"><h3 data-l="fa">چرا نتیجه روی اپراتور دیگر فرق دارد؟</h3><h3 data-l="en">Why do results differ per ISP?</h3>
+        <p data-l="fa">هر اپراتور ریزالورهای خودش را دارد و فیلترینگ هم فرق می‌کند. روی هر سیم‌کارت / وای‌فای جدا اسکن کنید؛ برنامه برای هر شبکه جدا یادش می‌ماند.</p>
+        <p data-l="en">Each ISP has its own resolvers and filtering. Scan on each SIM / Wi-Fi; the app remembers each network separately.</p></div>
+      <div class="card"><h3 data-l="fa">«بسته‌ها کوچک (MTU)» یعنی چه؟</h3><h3 data-l="en">What does "packets too small (MTU)" mean?</h3>
+        <p data-l="fa">ریزالور به سرور می‌رسد ولی جواب‌های بزرگ DNS را که تونل لازم دارد رد نمی‌کند؛ با این ریزالور تونل کار نمی‌کند.</p>
+        <p data-l="en">The resolver reaches the server but drops the large DNS replies the tunnel needs, so the tunnel can't work through it.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>DNS Tunnel Scanner</span>
+  <a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest"><span data-l="fa">آخرین نسخه</span><span data-l="en">Latest release</span></a>
+  <a href="https://plus98ir.dpdns.org/"><span data-l="fa">پروژه‌های دیگر</span><span data-l="en">More projects</span></a>
+  <span data-l="fa">موتور تونل: StormDNS (MIT)</span><span data-l="en">Tunnel engine: StormDNS (MIT)</span>
+</footer>
+
+<script>
+(function () {
+  var q = new URLSearchParams(location.search).get('lang'), saved;
+  try { saved = localStorage.getItem('dtscan.site.lang'); } catch (e) {}
+  var lang = q === 'en' || q === 'fa' ? q : saved || ((navigator.language || '').indexOf('fa') === 0 ? 'fa' : 'en');
+  function apply(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-lang]').forEach(function (b) { b.classList.toggle('on', b.dataset.lang === l); });
+    try { localStorage.setItem('dtscan.site.lang', l); } catch (e) {}
+  }
+  document.querySelectorAll('[data-lang]').forEach(function (b) { b.onclick = function () { apply(b.dataset.lang); }; });
+  apply(lang);
+})();
+</script>
+</body>
+</html>
