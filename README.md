@@ -3,7 +3,7 @@
 <a href="https://hits.sh/github.com/Plus98ir/DNS-Tunnel-Scanner/"><img src="https://hits.sh/github.com/Plus98ir/DNS-Tunnel-Scanner.svg?style=for-the-badge&label=views&color=2dd4bf" alt="Views"></a>
 <a href="https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest"><img src="https://img.shields.io/github/release-date/Plus98ir/DNS-Tunnel-Scanner?style=for-the-badge&label=latest%20build&color=0e7490" alt="Latest build"></a>
 
-**[English](#english) · [فارسی](#فارسی)** · Website: https://plus98ir.dpdns.org/DNS-Tunnel-Scanner/
+**[English](#english) · [فارسی](#فارسی)** · Website: https://corenetbase.com/DNS-Tunnel-Scanner/
 
 ![DNS Tunnel Scanner](DNS-Tunnel-Scanner.png)
 
