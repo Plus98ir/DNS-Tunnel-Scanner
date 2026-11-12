@@ -17,8 +17,63 @@ TA53aFyGNfSAcrCaJi9QmA9x5W47nPJcf7
 
 </details>
 
-<details>
-<summary><b>🇮🇷 فارسی</b></summary>
+<div align="center">
+
+[🇬🇧 English](#english) | [🇮🇷 فارسی](#persian)
+
+</div>
+
+---
+
+<a name="english"></a>
+
+## 🇬🇧 English
+
+Website: https://corenetbase.com/DNS-Tunnel-Scanner/
+
+![DNS Tunnel Scanner](DNS-Tunnel-Scanner.png)
+
+### Download · دانلود
+
+| | Download | |
+|---|---|---|
+| **Android** | [DNS-Tunnel-Scanner.apk](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk) | Android 7+ |
+| **Windows** | [DNS-Tunnel-Scanner.exe](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe) | double-click; no Python needed |
+
+---
+
+During an internet shutdown often only DNS still works. A DNS tunnel carries your traffic inside DNS queries, through a **DNS resolver**, to your tunnel server. Which resolvers carry it differs per ISP and changes over time.
+
+DNS Tunnel Scanner tests them on your current network and keeps only the ones that **really** work:
+
+1. **Quick filter**: a random name under your tunnel domain. Only your tunnel server can answer it, so an answer proves the resolver reaches the server (thousands of resolvers a minute).
+2. **Real test**: the real StormDNS client starts with just that one resolver, builds a tunnel session and loads an HTTPS page through it, then measures the speed. A failed session gets a second try.
+3. **Share**: the working resolvers, fastest first, as text, a file or a QR code, together with the WhiteDNS profile link.
+
+**Use it**
+
+1. Install the APK (Android 7+) or run the EXE (Windows 10/11, no Python needed).
+2. Paste your profile link once (`stormdns://…` or `masterdns://…`, e.g. WhiteDNS → export profile). It stays on your device; no panel access is needed.
+3. Keep the sources ticked (this device's DNS, resolvers that worked here before, Iranian and global public resolvers), add your own IPs or CIDR ranges if you like, and press **Start scan**. Nothing works? Turn on **Deep scan**: it searches your ISP's ranges for open resolvers no list has.
+4. In WhiteDNS: import the profile link and paste the resolver list.
+
+Results depend on the ISP: scan again on each SIM / Wi-Fi. The app remembers the working resolvers per network and tests them first next time.
+
+---
+
+Tunnel engine: [StormDNS](https://github.com/nullroute1970/StormDNS) (MIT), built from source.
+
+---
+
+<a name="persian"></a>
+
+## 🇮🇷 فارسی
+
+<div align="center">
+
+[🇬🇧 English](#english) | [🇮🇷 فارسی](#persian)
+
+</div>
 
 وب‌سایت: https://corenetbase.com/DNS-Tunnel-Scanner/
 
@@ -66,44 +121,3 @@ DNS Tunnel Scanner ریزالورها را روی همان اینترنتی که
 موتور تونل: [StormDNS](https://github.com/nullroute1970/StormDNS) (MIT)، از سورس ساخته شده.
 
 </div>
-
-</details>
-
-<details open>
-<summary><b>🇺🇸 English</b></summary>
-
-Website: https://corenetbase.com/DNS-Tunnel-Scanner/
-
-![DNS Tunnel Scanner](DNS-Tunnel-Scanner.png)
-
-### Download · دانلود
-
-| | Download | |
-|---|---|---|
-| **Android** | [DNS-Tunnel-Scanner.apk](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk) | Android 7+ |
-| **Windows** | [DNS-Tunnel-Scanner.exe](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe) | double-click; no Python needed |
-
----
-
-During an internet shutdown often only DNS still works. A DNS tunnel carries your traffic inside DNS queries, through a **DNS resolver**, to your tunnel server. Which resolvers carry it differs per ISP and changes over time.
-
-DNS Tunnel Scanner tests them on your current network and keeps only the ones that **really** work:
-
-1. **Quick filter**: a random name under your tunnel domain. Only your tunnel server can answer it, so an answer proves the resolver reaches the server (thousands of resolvers a minute).
-2. **Real test**: the real StormDNS client starts with just that one resolver, builds a tunnel session and loads an HTTPS page through it, then measures the speed. A failed session gets a second try.
-3. **Share**: the working resolvers, fastest first, as text, a file or a QR code, together with the WhiteDNS profile link.
-
-**Use it**
-
-1. Install the APK (Android 7+) or run the EXE (Windows 10/11, no Python needed).
-2. Paste your profile link once (`stormdns://…` or `masterdns://…`, e.g. WhiteDNS → export profile). It stays on your device; no panel access is needed.
-3. Keep the sources ticked (this device's DNS, resolvers that worked here before, Iranian and global public resolvers), add your own IPs or CIDR ranges if you like, and press **Start scan**. Nothing works? Turn on **Deep scan**: it searches your ISP's ranges for open resolvers no list has.
-4. In WhiteDNS: import the profile link and paste the resolver list.
-
-Results depend on the ISP: scan again on each SIM / Wi-Fi. The app remembers the working resolvers per network and tests them first next time.
-
----
-
-Tunnel engine: [StormDNS](https://github.com/nullroute1970/StormDNS) (MIT), built from source.
-
-</details>
