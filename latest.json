@@ -1,10 +1,10 @@
 {
   "version": "1.1",
-  "build": 15,
+  "build": 18,
   "files": [
     "DNS-Tunnel-Scanner.exe",
-    "DNS-Tunnel-Scanner-v1.1-build15.exe",
+    "DNS-Tunnel-Scanner-v1.1-build18.exe",
     "DNS-Tunnel-Scanner.apk",
-    "DNS-Tunnel-Scanner-v1.1-build15.apk"
+    "DNS-Tunnel-Scanner-v1.1-build18.apk"
   ]
 }
