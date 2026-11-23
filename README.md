@@ -29,6 +29,9 @@ TA53aFyGNfSAcrCaJi9QmA9x5W47nPJcf7
 | **Android** | [DNS-Tunnel-Scanner.apk](https://corenetbase.com/DNS-Tunnel-Scanner/dl/DNS-Tunnel-Scanner.apk) | Android 7+ |
 | **Windows** | [DNS-Tunnel-Scanner.exe](https://corenetbase.com/DNS-Tunnel-Scanner/dl/DNS-Tunnel-Scanner.exe) | double-click; no Python needed |
 
+> **Why does Google offer to scan the app?** This app isn't installed from Google Play, so Google doesn't know it yet and offers to check it before install. This happens with every app published outside Play. It's your choice: if you tap **Scan app**, Google checks the file itself and shows you the result.<br>
+> **چرا موقع نصب، گوگل پیشنهاد اسکن می‌دهد؟** این برنامه از Google Play نصب نمی‌شود، برای همین گوگل هنوز آن را نمی‌شناسد و پیشنهاد می‌دهد قبل از نصب بررسی‌اش کند. این پیغام برای همه‌ی برنامه‌هایی که بیرون از Play منتشر می‌شوند می‌آید. انتخاب با شماست؛ اگر **Scan app** را بزنید، خود گوگل فایل را بررسی می‌کند و نتیجه را به شما نشان می‌دهد.
+
 ---
 
 ## English
